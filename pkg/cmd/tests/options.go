@@ -55,6 +55,11 @@ type TestFrameworkOptions struct {
 	objectStorageType           framework.ObjectStorageType
 	gcsServiceAccountKey        []byte
 	s3CredentialsFile           []byte
+	ScyllaDBVersion             string
+	ScyllaManagerVersion        string
+	ScyllaManagerAgentVersion   string
+	ScyllaDBUpdateFrom          string
+	ScyllaDBUpgradeFrom         string
 }
 
 func NewTestFrameworkOptions(streams genericclioptions.IOStreams, userAgent string) *TestFrameworkOptions {
@@ -118,6 +123,11 @@ func (o *TestFrameworkOptions) AddFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(&o.ObjectStorageBucket, "object-storage-bucket", "", o.ObjectStorageBucket, "Name of the object storage bucket.")
 	cmd.PersistentFlags().StringVarP(&o.GCSServiceAccountKeyPath, "gcs-service-account-key-path", "", o.GCSServiceAccountKeyPath, "Path to a file containing a GCS service account key.")
 	cmd.PersistentFlags().StringVarP(&o.S3CredentialsFilePath, "s3-credentials-file-path", "", o.S3CredentialsFilePath, "Path to the AWS credentials file providing access to the S3 bucket.")
+	cmd.PersistentFlags().StringVarP(&o.ScyllaDBVersion, "scylla-db-version", "", o.ScyllaDBVersion, "Version of ScyllaDB to use in tests.")
+	cmd.PersistentFlags().StringVarP(&o.ScyllaManagerVersion, "scylla-manager-version", "", o.ScyllaManagerVersion, "Version of Scylla Manager to use in tests.")
+	cmd.PersistentFlags().StringVarP(&o.ScyllaManagerAgentVersion, "scylla-manager-agent-version", "", o.ScyllaManagerAgentVersion, "Version of Scylla Manager Agent to use in tests.")
+	cmd.PersistentFlags().StringVarP(&o.ScyllaDBUpdateFrom, "scylla-update-from", "", o.ScyllaDBUpdateFrom, "Version of Scylla Update to use in tests.")
+	cmd.PersistentFlags().StringVarP(&o.ScyllaDBUpgradeFrom, "scylla-upgrade-from", "", o.ScyllaDBUpgradeFrom, "Version of Scylla Upgrade to use in tests.")
 }
 
 func (o *TestFrameworkOptions) Validate(args []string) error {
@@ -226,13 +236,18 @@ func (o *TestFrameworkOptions) Complete(args []string) error {
 		RestConfigs: slices.ConvertSlice(o.ClientConfigs, func(cc genericclioptions.ClientConfig) *rest.Config {
 			return cc.RestConfig
 		}),
-		ArtifactsDir:         o.ArtifactsDir,
-		CleanupPolicy:        o.CleanupPolicy,
-		ScyllaClusterOptions: o.scyllaClusterOptions,
-		ObjectStorageType:    o.objectStorageType,
-		ObjectStorageBucket:  o.ObjectStorageBucket,
-		GCSServiceAccountKey: o.gcsServiceAccountKey,
-		S3CredentialsFile:    o.s3CredentialsFile,
+		ArtifactsDir:              o.ArtifactsDir,
+		CleanupPolicy:             o.CleanupPolicy,
+		ScyllaClusterOptions:      o.scyllaClusterOptions,
+		ObjectStorageType:         o.objectStorageType,
+		ObjectStorageBucket:       o.ObjectStorageBucket,
+		GCSServiceAccountKey:      o.gcsServiceAccountKey,
+		S3CredentialsFile:         o.s3CredentialsFile,
+		ScyllaDBVersion:           o.ScyllaDBVersion,
+		ScyllaManagerVersion:      o.ScyllaManagerVersion,
+		ScyllaManagerAgentVersion: o.ScyllaManagerAgentVersion,
+		ScyllaDBUpdateFrom:        o.ScyllaDBUpdateFrom,
+		ScyllaDBUpgradeFrom:       o.ScyllaDBUpgradeFrom,
 	}
 
 	if o.IngressController != nil {

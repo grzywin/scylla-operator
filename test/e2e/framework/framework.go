@@ -49,6 +49,8 @@ var _ ClusterInterface = &Framework{}
 func NewFramework(namePrefix string) *Framework {
 	var err error
 
+	SetScyllaVersionsFromArgs()
+
 	f := &Framework{
 		name:            names.SimpleNameGenerator.GenerateName(fmt.Sprintf("%s-", namePrefix)),
 		e2eArtifactsDir: "",
@@ -130,6 +132,24 @@ func (f *Framework) CommonLabels() map[string]string {
 	return map[string]string{
 		"e2e":       "scylla-operator",
 		"framework": f.name,
+	}
+}
+
+func SetScyllaVersionsFromArgs() {
+	if version := TestContext.ScyllaDBVersion; version != "" {
+		configassets.Project.Operator.ScyllaDBVersion = version
+	}
+	if version := TestContext.ScyllaManagerVersion; version != "" {
+		configassets.Project.Operator.ScyllaDBManagerVersion = version
+	}
+	if version := TestContext.ScyllaManagerAgentVersion; version != "" {
+		configassets.Project.Operator.ScyllaDBManagerAgentVersion = version
+	}
+	if version := TestContext.ScyllaDBUpdateFrom; version != "" {
+		configassets.Project.OperatorTests.ScyllaDBVersions.UpdateFrom = version
+	}
+	if version := TestContext.ScyllaDBUpgradeFrom; version != "" {
+		configassets.Project.OperatorTests.ScyllaDBVersions.UpgradeFrom = version
 	}
 }
 

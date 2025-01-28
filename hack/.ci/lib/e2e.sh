@@ -274,6 +274,11 @@ spec:
     - "--object-storage-bucket=${SO_BUCKET_NAME}"
     - "--gcs-service-account-key-path=${gcs_sa_in_container_path}"
     - "--s3-credentials-file-path=${s3_credentials_in_container_path}"
+    - "--scylla-db-version=${SCYLLA_DB_VERSION}"
+    - "--scylla-manager-version=${SCYLLA_MANAGER_VERSION}"
+    - "--scylla-manager-agent-version=${SCYLLA_MANAGER_AGENT_VERSION}"
+    - "--scylla-update-from=${SCYLLA_UPDATE_FROM}"
+    - "--scylla-upgrade-from=${SCYLLA_UPGRADE_FROM}"
     image: "${SO_IMAGE}"
     imagePullPolicy: Always
     volumeMounts:
